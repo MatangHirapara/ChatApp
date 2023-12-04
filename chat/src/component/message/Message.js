@@ -2,7 +2,7 @@ import React from "react";
 import "./message.css";
 
 
-const Message = ({ user, classs, message, time, img,openImageViewer }) => {
+const Message = ({ user, classs, message, time, img, openImageViewer }) => {
   
   if (user) {
     return (

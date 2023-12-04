@@ -44,7 +44,7 @@ const Chat = () => {
   const onEmojiClick = (event, emojiObject) => {
     let sym = event.unified.split("-");
     let codesArray = [];
-    sym.map((el) => codesArray.push("0x" + el));
+    sym.map((el) => codesArray.push("0x" + el)); 
     let emoji = String.fromCodePoint(...codesArray);
     setTextValue(textValue + emoji);
   };
@@ -106,7 +106,6 @@ const Chat = () => {
   }, [messages]);
 
   const openImageViewer = (img) => {
-    
     setCurrentImage([img, ...currentImage])
     setIsViewerOpen(true);
   };
