@@ -11,6 +11,12 @@
 .messageBox img{
     width: -webkit-fill-available;
 }
+.downloadBtn{
+    border-radius: 1rem;
+    border: navajowhite;
+    background: #ffb6b6;
+    cursor: pointer;
+}
 .right{
     float: right;
     background-color: crimson;

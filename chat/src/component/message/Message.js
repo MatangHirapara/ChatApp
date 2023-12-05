@@ -1,14 +1,20 @@
 import React from "react";
 import "./message.css";
-
-
+import DownloadIcon from "@mui/icons-material/Download";
+import { download } from "../chat/customeInput";
 const Message = ({ user, classs, message, time, img, openImageViewer }) => {
-  
   if (user) {
     return (
       <>
         <div className={`messageBox ${classs}`}>
-          {`${user}: ${message}`} <img src={img} alt="" />
+          {`${user}: ${message}`}{" "}
+          <img
+            src={img}
+            alt=""
+            onClick={() => {
+              openImageViewer(img);
+            }}
+          />
         </div>
         <p
           style={{
@@ -26,8 +32,19 @@ const Message = ({ user, classs, message, time, img, openImageViewer }) => {
     return (
       <>
         <div className={`messageBox ${classs}`}>
-            {`You: ${message}`}
-            <img src={img} alt="" onClick={() =>openImageViewer(img)}/>  
+          {`You: ${message}`}
+          <div>
+            <img
+              src={img}
+              alt=""
+              onClick={() => {
+                openImageViewer(img);
+              }}
+            />
+            {/* <button className="downloadBtn" onClick={()=>download(img)}>
+              <DownloadIcon />
+            </button> */}
+          </div>
         </div>
         <p
           style={{
