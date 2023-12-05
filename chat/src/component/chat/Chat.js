@@ -7,26 +7,15 @@ import ReactScrollToBottom from "react-scroll-to-bottom";
 import Picker from "emoji-picker-react";
 import happy from "../../images/happy.png";
 import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ImageViewer from "react-simple-image-viewer";
+import { VisuallyHiddenInput, currTime, download } from "./customeInput";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const ENDPOINT = "http://localhost:5500/";
 let socket;
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const Chat = () => {
-  const local = "en";
   const [id, setId] = useState();
   const [messages, setMessages] = useState([]);
   const [textValue, setTextValue] = useState("");
@@ -34,6 +23,7 @@ const Chat = () => {
   const [file, setFile] = useState();
   const [currentImage, setCurrentImage] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const [downloadImg, setDownloadImg] = useState()
 
   function handleChange(e) {
     if (e.target.files.length !== 0) {
@@ -44,17 +34,10 @@ const Chat = () => {
   const onEmojiClick = (event, emojiObject) => {
     let sym = event.unified.split("-");
     let codesArray = [];
-    sym.map((el) => codesArray.push("0x" + el)); 
+    sym.map((el) => codesArray.push("0x" + el));
     let emoji = String.fromCodePoint(...codesArray);
     setTextValue(textValue + emoji);
   };
-
-  const today = new Date();
-  const currTime = today.toLocaleTimeString(local, {
-    hour: "numeric",
-    hour12: true,
-    minute: "numeric",
-  });
 
   const send = () => {
     const message = textValue;
@@ -85,7 +68,6 @@ const Chat = () => {
     });
 
     socket.on("leave", (data) => {
-      // setMessages([...messages, data])
       console.log(data.user, data.message);
     });
 
@@ -100,19 +82,30 @@ const Chat = () => {
       setMessages([...messages, data]);
       console.log(data.user, data.message, data.id, data.currTime, data.file);
     });
+
     return () => {
       socket.off();
     };
   }, [messages]);
 
+  if(isViewerOpen){
+    const el = document.getElementById("ReactSimpleImageViewer")
+    console.log("el",el);
+  }
+
   const openImageViewer = (img) => {
-    setCurrentImage([img, ...currentImage])
+    setDownloadImg(img)
+    setCurrentImage([img, ...currentImage]);
     setIsViewerOpen(true);
   };
 
-  const closeImageViewer=() => {
+  const closeImageViewer = () => {
     setIsViewerOpen(false);
   };
+
+  const collection = document.getElementsByTagName("button");
+  collection.value = "^";
+
   return (
     <div className="chatPage">
       <div className="chatContainer">
@@ -160,15 +153,14 @@ const Chat = () => {
           </button>
         </div>
         <div className="imageViewer">
-          {isViewerOpen &&
-            ( 
-              <ImageViewer
-                src={currentImage}
-                disableScroll={false}
-                closeOnClickOutside={true}
-                onClose={closeImageViewer}
-              />
-            )}
+          {isViewerOpen && (
+            <div className="viewerPage">
+              <ImageViewer id="image-Privew" src={currentImage} onClose={closeImageViewer} />
+              <button className="downloadBtn" onClick={()=>download(downloadImg)}>
+                <DownloadIcon />
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
