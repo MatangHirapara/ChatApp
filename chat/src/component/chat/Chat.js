@@ -11,6 +11,7 @@ import AttachFileIcon from "@mui/icons-material/AttachFile";
 import ImageViewer from "react-simple-image-viewer";
 import { VisuallyHiddenInput, currTime, download } from "./customeInput";
 import DownloadIcon from "@mui/icons-material/Download";
+import InputEmoji from "react-input-emoji";
 
 const ENDPOINT = "http://localhost:5500/";
 let socket;
@@ -23,7 +24,13 @@ const Chat = () => {
   const [file, setFile] = useState();
   const [currentImage, setCurrentImage] = useState([]);
   const [isViewerOpen, setIsViewerOpen] = useState(false);
-  const [downloadImg, setDownloadImg] = useState()
+  const [downloadImg, setDownloadImg] = useState();
+
+  const [text, setText] = useState("");
+  console.log('text', text);
+  function handleOnEnter(text) {
+    console.log("enter", text);
+  }
 
   function handleChange(e) {
     if (e.target.files.length !== 0) {
@@ -32,10 +39,12 @@ const Chat = () => {
   }
 
   const onEmojiClick = (event, emojiObject) => {
+    console.log("event", event);
     let sym = event.unified.split("-");
     let codesArray = [];
     sym.map((el) => codesArray.push("0x" + el));
     let emoji = String.fromCodePoint(...codesArray);
+    console.log("emoji", emoji);
     setTextValue(textValue + emoji);
   };
 
@@ -80,7 +89,6 @@ const Chat = () => {
   useEffect(() => {
     socket.on("sendMessage", (data) => {
       setMessages([...messages, data]);
-      console.log(data.user, data.message, data.id, data.currTime, data.file);
     });
 
     return () => {
@@ -88,13 +96,8 @@ const Chat = () => {
     };
   }, [messages]);
 
-  if(isViewerOpen){
-    const el = document.getElementById("ReactSimpleImageViewer")
-    console.log("el",el);
-  }
-
   const openImageViewer = (img) => {
-    setDownloadImg(img)
+    setDownloadImg(img);
     setCurrentImage([img, ...currentImage]);
     setIsViewerOpen(true);
   };
@@ -102,9 +105,6 @@ const Chat = () => {
   const closeImageViewer = () => {
     setIsViewerOpen(false);
   };
-
-  const collection = document.getElementsByTagName("button");
-  collection.value = "^";
 
   return (
     <div className="chatPage">
@@ -155,8 +155,15 @@ const Chat = () => {
         <div className="imageViewer">
           {isViewerOpen && (
             <div className="viewerPage">
-              <ImageViewer id="image-Privew" src={currentImage} onClose={closeImageViewer} />
-              <button className="downloadBtn" onClick={()=>download(downloadImg)}>
+              <ImageViewer
+                id="image-Privew"
+                src={currentImage}
+                onClose={closeImageViewer}
+              />
+              <button
+                className="downloadBtn"
+                onClick={() => download(downloadImg)}
+              >
                 <DownloadIcon />
               </button>
             </div>

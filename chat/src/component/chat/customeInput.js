@@ -22,7 +22,6 @@ export const currTime = today.toLocaleTimeString(local, {
 
 
 export const download = (e) => {
-    console.log("e",e);
     fetch(e, {
       method: "GET",
       headers: {},
