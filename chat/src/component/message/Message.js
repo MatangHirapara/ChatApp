@@ -1,7 +1,6 @@
 import React from "react";
 import "./message.css";
-import DownloadIcon from "@mui/icons-material/Download";
-import { download } from "../chat/customeInput";
+
 const Message = ({ user, classs, message, time, img, openImageViewer }) => {
   if (user) {
     return (

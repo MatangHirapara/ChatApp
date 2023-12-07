@@ -45,7 +45,15 @@
   background: #ffb6b6;
   cursor: pointer;
 }
-
+.EmojiPickerReact{
+    width: -webkit-fill-available !important;
+}
+.chatContainer .chatBox button{
+    clip-path: polygon(0 0, calc(100% - 30px) 18%, 80% 17%, 42% 87%);
+    width: 30px;
+    height: 25px;
+    background-color: black;
+}
 #ReactSimpleImageViewer{
     position: relative;
 }

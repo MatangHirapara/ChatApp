@@ -24,7 +24,7 @@ app.get("/votingSection", async (req, res) => {
     result = {
       voting: qryData["voting"],
     };
-  };
+  }
 
   io.emit("vote", result);
   res.status(200).send(result);
@@ -47,14 +47,18 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on('message', ({message, id, currTime,file}) => {
-    io.emit('sendMessage',{user:users[id],message, id, currTime,file
-    })
-  })
+  socket.on("message", ({ message, id, currTime, file }) => {
+    io.emit("sendMessage", { user: users[id], message, id, currTime, file });
+  });
 
-  socket.on('disConnect', () => {
-    socket.broadcast.emit('leave', {user: "Admin",message: `${users[socket.id]} has left`});
-    console.log('User Left');
+  socket.on("disConnect", () => {
+    
+      console.log("User Left");
+      socket.broadcast.emit("leave", {
+        user: "Admin",
+        message: `${users[socket.id]} has left`,
+      });
+    
   });
 });
 
